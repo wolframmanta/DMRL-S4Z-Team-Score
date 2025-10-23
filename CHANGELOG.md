@@ -17,7 +17,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sound notifications for rank changes
 - Multi-language support
 
-## [0.1.0-beta] - TBD
+## [0.1.0-prototype] - 2025-10-23
+
+### Added
+- Initial working prototype of Team Live Scores (TLS)
+- Live team standings with category filter (A/B/C/D/E/All)
+- All Categories view shows Stage Points Earned + Raw Points
+- Category view shows Points and expandable rider details
+- Fixed 30s auto-refresh
+- Always-visible title bar with gear icon for settings
+- Settings: theme, background, font scale, line spacing
+- WordPress base URL hardcoded to https://dirtymittenracing.com
+- Authentication via X-TLS-Access-Token header (password in settings)
+- Status indicator updates (Initializing, Fetching, Ready, Error)
+- Packaging script/steps and repository bootstrap
+
+### Server Integration
+- WordPress REST namespace: `s4z-tls/v1`
+- Endpoints: `/team-standings` (auto-detect current live), `/races` (public), `/team-map`
+- Rate limiting toggle in WordPress admin (S4Z Live → Settings)
 
 ### Added
 - Initial project architecture
@@ -44,8 +62,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History Summary
 
-- **0.1.0-beta** - Initial architecture and documentation (current)
-- **0.2.0-beta** - Planned: Team Live Scores window implementation
-- **0.3.0-beta** - Planned: Stage Totals window implementation
-- **0.4.0-beta** - Planned: Polish and features
-- **1.0.0** - Planned: Production release
+- **0.1.0-prototype** - First working prototype pushed to GitHub
+- **Next** - Stage Totals window, polish, and additional features

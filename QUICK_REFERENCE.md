@@ -2,27 +2,27 @@
 
 ## Quick Start
 
-1. **Install**: Extract to Sauce mods directory
-2. **Configure**: Open settings → Enter WordPress URL
-3. **Enter Password**: Enter access password (contact DMRL admin)
-4. **Select Race**: Choose race from dropdown
-5. **Pick Category**: Select category to display
-6. **Auto-Refresh**: Automatically updates every 30 seconds
+1. **Install**: Extract or clone to Sauce mods directory
+2. **Configure**: Open settings → Enter access password
+3. **No Race Selector**: TLS auto-detects the current live race
+4. **Pick Category**: A/B/C/D/E or All
+5. **Auto-Refresh**: Updates every 30 seconds
 
 ---
 
 ## Window Types
 
 ### Team Live Scores
-**Purpose**: Single category live standings  
+**Purpose**: Category live standings (or All Categories)  
 **Size**: 350×600px  
 **Key Features**:
-- Category-specific view
-- Expandable rider details
+- Category-specific view (Points)
+- All Categories view (Stage Points Earned + Raw Points)
+- Expandable rider details (category view)
 - Auto-refresh
 - Multiple instances allowed
 
-### Stage Totals
+### Stage Totals (Planned)
 **Purpose**: Combined multi-category standings  
 **Size**: 450×600px  
 **Key Features**:
@@ -37,7 +37,7 @@
 
 | Action | Method |
 |--------|--------|
-| Open Settings | Click ⚙️ icon |
+| Open Settings | Click ⚙️ in title bar |
 | Refresh Data | Click ↻ button |
 | Expand Team | Click team row |
 | Change Category | Use category dropdown |
@@ -48,19 +48,16 @@
 ## API Endpoints Reference
 
 ```
-WordPress Base URL: https://your-site.com
+WordPress Base URL: https://dirtymittenracing.com
 
-Team Standings by Event ID:
-GET /wp-json/s4z-team/v1/team-standings?event_id={eventId}&nocache=true
+Current Live Team Standings (auth):
+GET /wp-json/s4z-tls/v1/team-standings
 
-Team Standings by Race ID:
-GET /wp-json/s4z-team/v1/races/{raceId}/team-standings?nocache=true
+Available Races (public):
+GET /wp-json/s4z-tls/v1/races
 
-Available Races:
-GET /wp-json/s4z-team/v1/races
-
-Team Map (Roster):
-GET /wp-json/s4z-team/v1/team-map?event_id={eventId}&nocache=true
+Team Map (Roster) (auth):
+GET /wp-json/s4z-tls/v1/team-map
 ```
 
 ---
@@ -68,10 +65,9 @@ GET /wp-json/s4z-team/v1/team-map?event_id={eventId}&nocache=true
 ## Settings Storage Keys
 
 ```javascript
-// Global settings
-"tls_wordpress_url"           // WordPress site URL
-"tls_access_token"            // Access password (stored securely)
-"tls_refresh_interval"        // Fixed at 30 seconds
+// Global (localStorage)
+"tls_access_password"         // Access password
+"tls_selected_category"       // Current category filter
 
 // Shared request coordinator
 "tls_shared_buffer": {
@@ -80,14 +76,7 @@ GET /wp-json/s4z-team/v1/team-map?event_id={eventId}&nocache=true
   "active_windows": ["window_1", "window_2"]
 }
 
-// Per-window settings (replace {windowId} with actual ID)
-"tls_window_{windowId}": {
-  "race_id": 123,              // Selected race
-  "event_id": 456,             // Zwift event ID
-  "category_id": "A",          // Selected category
-  "auto_refresh": true,        // Auto-refresh enabled
-  "expanded_teams": [1, 3, 5]  // Expanded team IDs
-}
+// Per-window display settings are stored via Sauce settingsStore under key "tls-settings"
 ```
 
 ---
@@ -124,6 +113,7 @@ GET /wp-json/s4z-team/v1/team-map?event_id={eventId}&nocache=true
       "team_id": 1,
       "team_name": "Team Alpha",
       "league_points": 24,
+      "raw_points": 350.0,
       "category_points": {"A": 8, "B": 8, "C": 8}
     }
   ]
@@ -146,17 +136,15 @@ GET /wp-json/s4z-team/v1/team-map?event_id={eventId}&nocache=true
 ## Common Issues & Fixes
 
 ### No Data Displaying
-✓ Check WordPress URL in settings  
 ✓ **Verify access password is correct**  
 ✓ Verify S4Z-live plugin is active  
-✓ Ensure race is selected  
-✓ Confirm MoZ is sending data
+✓ Confirm MoZ is sending data  
+✓ Check WordPress rate limiting toggle (admin)
 
 ### Access Denied / 401 Error
-✓ **Access password may have changed**  
-✓ Click "Update Settings" button in error message  
-✓ Contact DMRL Jedi for current password  
-✓ Re-enter password in settings window  
+✓ Access password may be wrong  
+✓ Use Test Connection in settings  
+✓ Contact DMRL admin for current password  
 
 ### Stale Data Warning
 ✓ Enable auto-refresh  
@@ -200,24 +188,15 @@ DMRL-team-live-scores/
 │   │   ├── icon128.png           # Mod icon
 │   │   └── favicon.png           # Favicon
 │   ├── css/
-│   │   ├── common.css            # Shared styles
-│   │   ├── team-live-scores.css  # Live scores styles
-│   │   └── stage-totals.css      # Stage totals styles
+│   │   └── common.css            # Shared styles
 │   ├── src/
-│   │   ├── preloads.js           # Sauce initialization
-│   │   ├── api-client.js         # WordPress API client
-│   │   ├── config-manager.js     # Settings management
-│   │   ├── race-selector.js      # Race dropdown
-│   │   ├── category-selector.js  # Category dropdown
-│   │   ├── team-renderer.js      # Team standings renderer
-│   │   ├── stage-renderer.js     # Stage totals renderer
-│   │   └── auto-refresh.js       # Polling mechanism
+│   │   ├── team-live-scores.mjs  # Main window logic
+│   │   └── team-live-scores-settings.mjs  # Settings window logic
 │   ├── team-live-scores.html             # Main window
 │   ├── team-live-scores-settings.html    # Settings
 │   ├── stage-totals.html                 # Stage window
 │   └── stage-totals-settings.html        # Stage settings
-└── release-notes/
-    └── 0.1.0-beta.md             # Release notes
+└── release-notes/ (optional)
 ```
 
 ---

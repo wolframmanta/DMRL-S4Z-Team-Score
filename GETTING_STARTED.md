@@ -1,3 +1,158 @@
+# Getting Started - DMRL Team Live Scores (TLS)
+
+This guide helps you develop and test the DMRL Team Live Scores mod.
+
+---
+
+## Prerequisites
+
+### Software
+- Sauce for Zwift (latest)
+- VS Code or another editor
+- Git
+- Chromium-based browser (for DevTools)
+
+### Knowledge
+- JavaScript (ES modules / async/await)
+- HTML5 & CSS3
+- REST APIs
+- DOM manipulation
+
+---
+
+## Project Setup
+
+```bash
+# Navigate to Sauce mods directory
+cd ~/Documents/SauceMods/
+
+# Project lives here
+cd DMRL-team-live-scores/
+
+# Optional: verify structure
+ls -la
+```
+
+Notes:
+- No build step — Sauce loads directly from this folder
+- Use .mjs ES modules and Sauce common: `import * as common from '/pages/src/common.mjs'`
+- Titlebar is always visible; click the gear icon for settings
+
+---
+
+## Current Prototype Behavior
+
+- Race selection: Not required — server auto-detects the current live race
+- Category filter: A/B/C/D/E or All Categories
+- Authentication: Settings → Access Password (sent as `X-TLS-Access-Token`)
+- Display: Font scale, line spacing, solid background, background color
+- Refresh: Fixed 30-second auto-refresh
+
+---
+
+## File Structure
+
+```
+DMRL-team-live-scores/
+├── manifest.json
+├── README.md
+├── CHANGELOG.md
+├── GETTING_STARTED.md
+├── ARCHITECTURE.md
+├── QUICK_REFERENCE.md
+├── pages/
+│   ├── css/
+│   │   └── common.css
+│   ├── images/
+│   ├── src/
+│   │   ├── team-live-scores.mjs
+│   │   └── team-live-scores-settings.mjs
+│   ├── team-live-scores.html
+│   └── team-live-scores-settings.html
+└── dist/
+```
+
+---
+
+## Testing Checklist (Prototype)
+
+- [ ] API calls succeed with valid password
+- [ ] 401 handled (invalid password)
+- [ ] 429 handled (rate limiting)
+- [ ] Settings persist (password, display, category)
+- [ ] Test Connection works
+- [ ] Category switching re-renders from cached data
+- [ ] Status text transitions: Initializing → Fetching → Ready
+
+---
+
+## Data Model (Server Response)
+
+- All Categories: `combined[]` entries with `league_points` (Stage Points Earned) and `raw_points`
+- Category view: `categories[].teams[]` entries with `total_points` and `riders[]`
+
+---
+
+## API Testing
+
+```bash
+BASE=https://dirtymittenracing.com
+TOKEN=your-password-here
+
+# Races (public)
+curl "$BASE/wp-json/s4z-tls/v1/races"
+
+# Current live standings (auth)
+curl -H "X-TLS-Access-Token: $TOKEN" \
+     "$BASE/wp-json/s4z-tls/v1/team-standings"
+
+# Rate limiting (expect 429 during rapid calls)
+for i in {1..5}; do
+  curl -s -o /dev/null -w "%{http_code}\n" \
+       -H "X-TLS-Access-Token: $TOKEN" \
+       "$BASE/wp-json/s4z-tls/v1/team-standings"
+  sleep 5
+done
+```
+
+---
+
+## Browser Console Quick Checks
+
+```javascript
+// Verify stored preferences
+localStorage.getItem('tls_access_password')
+localStorage.getItem('tls_selected_category')
+
+// Check status text
+document.getElementById('statusText').textContent
+```
+
+---
+
+## Packaging (Release ZIP)
+
+```bash
+cd DMRL-team-live-scores
+rm -rf dist && mkdir -p dist/dmrl-team-live-scores
+cp -r pages dist/dmrl-team-live-scores/
+cp manifest.json dist/dmrl-team-live-scores/
+cp README.md CHANGELOG.md dist/dmrl-team-live-scores/
+cd dist && zip -r dmrl-team-live-scores-v0.1.0-prototype.zip dmrl-team-live-scores/
+```
+
+---
+
+## Planned Next
+
+- Stage Totals window (combined standings)
+- Additional polish and features
+
+---
+
+Document Version: 1.1  
+Last Updated: October 23, 2025  
+Author: the.Colonel
 # Getting Started - DMRL Team Live Scores Development
 
 This guide will help you get started developing the DMRL Team Live Scores mod.

@@ -1,4 +1,4 @@
-# DMRL's Team Live Scores
+# DMRL Team Live Scores (TLS)
 
 A Sauce for Zwift mod that displays real-time team standings during races by reading live scores from WordPress.
 
@@ -14,16 +14,15 @@ Team Live Scores (TLS) completes the DMRL race scoring ecosystem:
 
 ### 📊 Live Team Standings
 - Real-time team scores by category (A, B, C, D, E)
-- Auto-refresh with configurable intervals (5s - 60s)
-- Expandable rider details per team
-- Color-coded teams
-- Rank tracking with league points
+- Auto-refresh every 30 seconds (fixed)
+- Expandable rider details per team (category view)
+- “All Categories” shows Stage Points Earned + Raw Points
+- Category view shows Points (raw points in that category)
 
-### 🏆 Stage Totals
-- Combined standings across all categories
-- League points aggregation
-- Category-by-category breakdown
-- Overall team rankings
+### 🏆 Stage Totals (TBD)
+- Combined standings across all categories (planned)
+- League points aggregation (planned)
+- Category-by-category breakdown (planned)
 
 ### 🪟 Multi-Window Support
 - Open multiple windows for different categories
@@ -32,50 +31,47 @@ Team Live Scores (TLS) completes the DMRL race scoring ecosystem:
 - Overlay-friendly design
 
 ### ⚙️ Configuration
-- Select from available races
-- Configure WordPress site URL
-- Customize refresh intervals
-- Show/hide point breakdowns
-- Expand/collapse team details
+- WordPress base URL is fixed: https://dirtymittenracing.com
+- Enter access password (provided by DMRL)
+- Choose category (A, B, C, D, E, or All)
+- Display: theme, background, font scale, line spacing
 
 ## Installation
 
-1. Install [Sauce for Zwift](https://www.sauce.llc/)
-2. Download the latest release of DMRL's Team Live Scores
-3. Extract to your Sauce mods directory
-4. Restart Sauce for Zwift
-5. Open "TLS Team Live Scores" or "TLS Stage Totals" from Sauce menu
+1. Install Sauce for Zwift
+2. Download the latest release ZIP or clone this repo
+3. Place the folder under your Sauce mods directory (no build step required)
+4. Restart Sauce for Zwift (or reload the window)
+5. Open "TLS Team Live Scores" from Sauce’s menu
 
 ## Setup
 
-1. Open the settings window (gear icon)
-2. Enter your WordPress site URL (where S4Z-live is installed)
-3. **Enter access password** (contact DMRL admin for password)
-4. Click "Test Connection" to verify settings
-5. Select a race from the dropdown
-6. Choose your category (for Live Scores window)
-7. Auto-refresh runs automatically every 30 seconds
+1. Open the settings window (gear icon in the title bar; title bar is always visible)
+2. Base URL is fixed to https://dirtymittenracing.com (displayed, non-editable)
+3. Enter the access password (from DMRL) and click "Test Connection"
+4. Close settings — the window will auto-load the current live race
+5. Use the Category dropdown to filter (A/B/C/D/E or All)
+6. Auto-refresh runs automatically every 30 seconds
 
 ## Usage
 
 ### Team Live Scores Window
-- **Race Selection**: Choose which race to monitor
-- **Category Selection**: Pick A, B, C, D, E, or other category
-- **Auto-Refresh**: Updates automatically every 30 seconds
-- **Expand Teams**: Click team rows to see rider details
-- **Multiple Windows**: Open multiple instances for different categories (shares single fetch operation)
+- No race selector — it always displays the most recent live race
+- Category Selection: Pick A, B, C, D, E, or All Categories
+- Auto-Refresh: Updates automatically every 30 seconds
+- Expand Teams: Click team rows to see rider details (category view)
+- Multiple Windows: Open multiple instances for different categories
 
-### Stage Totals Window
-- **Race Selection**: Choose which race to monitor
-- **Combined View**: See all teams across all categories
-- **Auto-Refresh**: Updates automatically every 30 seconds
-- **League Points**: Points awarded based on category rankings
-- **Category Breakdown**: See which categories contributed to team totals
+### Stage Totals Window (Planned)
+- Combined View across all categories
+- League Points and Raw Points summary
+- Auto-Refresh: 30 seconds
+- Category breakdown planned
 
 ## Requirements
 
 - **Sauce for Zwift**: Latest stable version
-- **S4Z-live WordPress Plugin**: v0.7.6-beta or higher
+- **S4Z-live WordPress Plugin**: feature/team-live-scores-auth (or later)
 - **Master of Zen Mod**: v0.3.8 or higher (for score calculation)
 
 ## Data Flow
@@ -85,7 +81,7 @@ Zwift Race
     ↓
 Master of Zen (calculates individual scores)
     ↓
-WordPress (S4Z-live plugin calculates team scores)
+WordPress (S4Z-live plugin calculates team totals)
     ↓
 Team Live Scores (displays team standings)
 ```
@@ -111,66 +107,55 @@ Displays combined team standings **across all categories**:
 - Raw points (sum)
 - Category breakdown (A: 8, B: 7, etc.)
 
-**Default Size**: 450px × 600px
+**Default Size**: 450px × 600px (planned)
 
 ## Settings
 
 ### Global Settings
-- WordPress Site URL
-- **Access Password** (required - contact DMRL admin)
-- Refresh interval (fixed at 30 seconds)
-- Theme preferences
+- Base URL (fixed to https://dirtymittenracing.com)
+- Access Password (required; contact DMRL admin)
+- Auto-refresh (fixed at 30 seconds)
+- Display: font scale, line spacing, background
 
 ### Per-Window Settings
-- Selected race
 - Selected category (Live Scores only)
-- Auto-refresh always enabled
-- Expanded teams state
+- Expanded teams state (category view)
 - Display preferences
 
 ## API Endpoints
 
 TLS consumes these WordPress REST API endpoints:
 
-- `GET /wp-json/s4z-team/v1/team-standings?event_id={eventId}`
-- `GET /wp-json/s4z-team/v1/races/{raceId}/team-standings`
-- `GET /wp-json/s4z-team/v1/races`
-- `GET /wp-json/s4z-team/v1/team-map?event_id={eventId}`
+- `GET /wp-json/s4z-tls/v1/team-standings` (no params; server auto-detects current live race)
+- `GET /wp-json/s4z-tls/v1/races` (public; informational)
+- `GET /wp-json/s4z-tls/v1/team-map` (auth required; roster map)
 
 ## Troubleshooting
 
 ### No Data Showing
-- Verify WordPress URL is correct in settings
-- **Check that access password is entered correctly**
+- Ensure the access password is entered correctly in settings
 - Ensure S4Z-live plugin is active on WordPress
-- Check that a race is selected
-- Verify Master of Zen is sending data to WordPress
+- Verify MoZ has produced scores for the current race
+- Check WordPress admin: S4Z Live → Settings (rate limiting may block frequent calls)
 
-### "Access Denied" Error
-- **Your access password may have changed or expired**
-- Click the "Update Settings" button shown in the error
-- Contact a DMRL Jedi to get the current access password
-- Enter the new password in settings
-- Auto-refresh will resume once password is updated
+### "Access Denied" (401)
+- Password may be incorrect — update in settings
+- Click Test Connection to verify
+- Contact DMRL admin for the current access password
 
-### Stale Data
-- Auto-refresh runs every 30 seconds automatically
-- Check "last updated" timestamp in window
-- Verify network connectivity
-- Check WordPress site is responding
-- Look for error messages in the window
+### Rate Limited (429)
+- WordPress can enforce a 30-second minimum between requests
+- For testing, admins can disable the TLS rate limiter in WordPress: S4Z Live → Settings
 
 ### Categories Not Appearing
-- Ensure race has started and riders have scores
-- Verify race is configured in S4Z-live plugin
-- Check that MoZ is sending data with category information
+- Wait for race scoring to begin (MoZ → WordPress ingest)
+- Verify categories exist in the standings payload
 
 ### Connection Errors
-- Check WordPress site is accessible from your network
-- Verify access password is correct (401 errors)
-- Check for rate limiting (429 errors) - wait 30 seconds
-- Verify CORS is enabled on WordPress with custom headers
-- Check browser console for detailed error messages
+- Verify WordPress is reachable
+- Verify password (401)
+- Rate limiting (429): wait or disable in WordPress for testing
+- Check browser console for details
 
 ## Development
 
@@ -192,35 +177,21 @@ DMRL-team-live-scores/
 └── release-notes/
 ```
 
-### Building
-1. Clone the repository
-2. No build step required (vanilla JavaScript)
-3. Copy to Sauce mods directory
-4. Reload Sauce
+### Building / Packaging
+No build is required for local development. To create a distributable ZIP:
+
+```
+cd DMRL-team-live-scores
+rm -rf dist && mkdir -p dist/dmrl-team-live-scores
+cp -r pages dist/dmrl-team-live-scores/
+cp manifest.json dist/dmrl-team-live-scores/
+cp README.md CHANGELOG.md dist/dmrl-team-live-scores/
+cd dist && zip -r dmrl-team-live-scores-v0.1.0-prototype.zip dmrl-team-live-scores/
+```
 
 ## Roadmap
 
-### v0.1.0-beta (Current)
-- Core infrastructure
-- API client
-- Configuration management
-
-### v0.2.0-beta
-- Team Live Scores window
-- Race and category selection
-- Auto-refresh
-
-### v0.3.0-beta
-- Stage Totals window
-- Combined standings
-
-### v0.4.0-beta
-- Polish and features
-- Performance optimization
-
-### v1.0.0
-- Production release
-- Full documentation
+See CHANGELOG for details.
 
 ## Contributing
 
@@ -246,5 +217,5 @@ For support, contact DMRL administrators or visit [https://dirtymittenracing.com
 
 ---
 
-**Version**: 0.1.0-beta  
+**Version**: 0.1.0-prototype  
 **Last Updated**: October 23, 2025

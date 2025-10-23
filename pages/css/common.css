@@ -1,0 +1,377 @@
+/* Base styles for Team Live Scores mod - adapted from MoZ common.css */
+
+:root {
+  --font-scale: 2.8;
+  --background-color: rgba(24, 24, 24, 0.95);
+  --text-color: #f0f0f0;
+  --border-color: rgba(255, 255, 255, 0.12);
+  --accent-color: #4a9eff;
+  --error-color: #ff4444;
+  --success-color: #44ff44;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 16px;
+  color: var(--text-color);
+  background: transparent;
+}
+
+html.solid-background {
+  background: var(--background-color);
+}
+
+html.solid-background body {
+  background: transparent !important;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--background-color);
+}
+
+/* Titlebar */
+#titlebar {
+  flex: 0 0 auto;
+  -webkit-app-region: drag;
+  user-select: none;
+}
+
+#titlebar header {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(16, 16, 16, 0.95);
+  border-bottom: 1px solid var(--border-color);
+  font-size: calc(var(--font-scale) * 0.35em);
+}
+
+#titlebar .logo {
+  flex: 0 0 auto;
+  margin-right: 10px;
+  -webkit-app-region: no-drag;
+}
+
+#titlebar .logo img {
+  height: 24px;
+  width: 24px;
+  vertical-align: middle;
+}
+
+#titlebar .title {
+  flex: 0 0 auto;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+#titlebar .filler {
+  flex: 1 1 auto;
+}
+
+#titlebar .buttons {
+  display: flex;
+  gap: 6px;
+  -webkit-app-region: no-drag;
+}
+
+#titlebar .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-color);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9em;
+}
+
+#titlebar .button:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+#titlebar .button ms {
+  font-family: 'Material Symbols Outlined';
+  font-size: 1.2em;
+}
+
+/* Content area */
+#content {
+  flex: 1 1 auto;
+  overflow: auto;
+  padding: 0;
+  scroll-behavior: smooth;
+  position: relative;
+}
+
+/* Controls bar */
+#controlsBar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(24, 24, 24, 0.95);
+  border-bottom: 1px solid var(--border-color);
+  font-size: calc(var(--font-scale) * 0.32em);
+}
+
+#controlsBar label {
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+#controlsBar select,
+#controlsBar button {
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-color);
+  font-size: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#controlsBar select:hover,
+#controlsBar button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+#controlsBar select:disabled,
+#controlsBar button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#controlsBar .spacer {
+  flex: 1 1 auto;
+}
+
+#controlsBar .status {
+  font-size: 0.9em;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#controlsBar .status.error {
+  color: var(--error-color);
+}
+
+#controlsBar .status.success {
+  color: var(--success-color);
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: calc(var(--font-scale) * 0.35em);
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  padding: 10px 12px;
+  background: rgba(32, 32, 32, 0.95);
+  border-bottom: 2px solid var(--border-color);
+  text-align: left;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.9em;
+}
+
+tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+tbody tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Hintbar */
+#hintbar {
+  flex: 0 0 auto;
+  padding: 6px 12px;
+  background: rgba(16, 16, 16, 0.95);
+  border-top: 1px solid var(--border-color);
+  font-size: calc(var(--font-scale) * 0.28em);
+}
+
+#hintbar .hint {
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* Loading spinner */
+.loading {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--accent-color);
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error messages */
+.error-message {
+  padding: 16px;
+  margin: 16px;
+  background: rgba(255, 68, 68, 0.15);
+  border: 1px solid var(--error-color);
+  border-radius: 6px;
+  color: var(--error-color);
+  font-size: calc(var(--font-scale) * 0.35em);
+}
+
+.error-message button {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: var(--error-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.error-message button:hover {
+  opacity: 0.9;
+}
+
+/* Team colors */
+.team-a { color: #ff6b6b; }
+.team-b { color: #4ecdc4; }
+.team-c { color: #ffe66d; }
+.team-d { color: #a8e6cf; }
+.team-e { color: #ff8b94; }
+
+/* Utility classes */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.font-weight-bold { font-weight: 600; }
+.opacity-50 { opacity: 0.5; }
+
+/* Team Live Scores - Additional Styles */
+
+.teams-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant: tabular-nums;
+}
+
+.teams-table thead th {
+  text-align: left;
+  padding: 0.5em;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  font-weight: bold;
+  font-variant: small-caps;
+}
+
+.teams-table tbody td {
+  padding: 0.5em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.teams-table .team-row {
+  cursor: pointer;
+}
+
+.teams-table .team-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.teams-table .rank {
+  width: 3em;
+  text-align: center;
+  font-weight: bold;
+}
+
+.teams-table .points {
+  width: 6em;
+  text-align: right;
+}
+
+.riders-row {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.riders-list {
+  padding: 0.5em 2em;
+}
+
+.riders-list .rider {
+  padding: 0.25em 0;
+  font-size: 0.9em;
+}
+
+#controlsBar {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.5em;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#controlsBar label {
+  margin: 0;
+  white-space: nowrap;
+}
+
+#controlsBar select {
+  min-width: 150px;
+  padding: 0.25em;
+}
+
+#controlsBar .spacer {
+  flex: 1;
+}
+
+#statusIndicator {
+  padding: 0.25em 0.5em;
+  border-radius: 0.25em;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 0.9em;
+}
+
+form#options label key {
+  display: inline-block;
+  margin-right: 1em;
+  min-width: 20ch;
+}
+
+form#options label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.3em 0.5em;
+  border-radius: 0.28em;
+}
+
+form#options label:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}

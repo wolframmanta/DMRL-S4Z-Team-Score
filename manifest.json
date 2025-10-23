@@ -1,0 +1,41 @@
+{
+    "manifest_version": 1,
+    "name": "DMRL's Team Live Scores",
+    "description": "Display live team standings from WordPress during races",
+    "author": "the.Colonel",
+    "website_url": "https://dirtymittenracing.com",
+    "version": "0.1.0-prototype",
+    "content_js": [],
+    "content_css": [],
+    "web_root": "pages",
+    "windows": [
+        {
+            "file": "pages/team-live-scores.html",
+            "id": "team-live-scores",
+            "name": "TLS Team Live Scores",
+            "description": "Display live team standings for a selected category",
+            "overlay": true,
+            "frame": false,
+            "default_bounds": {
+                "width": 300,
+                "height": 500,
+                "x": -300,
+                "y": 100
+            }
+        },
+        {
+            "file": "pages/stage-totals.html",
+            "id": "stage-totals",
+            "name": "TLS Stage Totals",
+            "description": "Display combined team standings across all categories",
+            "overlay": true,
+            "frame": false,
+            "default_bounds": {
+                "width": 300,
+                "height": 500,
+                "x": -300,
+                "y": 100
+            }
+        }
+    ]
+}

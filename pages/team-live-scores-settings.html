@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html class="settings-page" tabindex="0" data-settings-key="tls-settings">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"/>
+
+    <title>TLS Team Live Scores Config</title>
+
+    <link id="favicon" rel="shortcut icon" href="/pages/images/favicon.png"/>
+    <link rel="stylesheet" href="/pages/css/common.css"/>
+
+    <script type="module" src="./src/team-live-scores-settings.mjs"></script>
+  </head>
+  
+  <body>
+    <div id="titlebar">
+      <header>
+        <div class="logo"><img src="/pages/images/icon128.png"/></div>
+        <div class="title">TLS Team Live Scores Config</div>
+        <div class="filler"></div>
+        <div class="buttons">
+          <div title="Close this window" class="button close electron-only"><ms>close</ms></div>
+        </div>
+      </header>
+    </div>
+
+    <div id="settings">
+      <form id="options" class="section">
+        <div class="title">Display Settings</div>
+        
+        <label>
+          <key>Theme override:</key>
+          <select is="sauce-theme" override></select>
+        </label>
+
+        <label title="Mostly useful for streamers using OBS window and browser sources">
+          <key>Solid background:</key>
+          <input type="checkbox" name="solidBackground"/>
+        </label>
+
+        <label>
+          <key>Background color:</key>
+          <input type="color" name="backgroundColor" data-depends-on="solidBackground"/>
+          <input type="text" name="backgroundColor" data-depends-on="solidBackground" size="7"/>
+        </label>
+
+        <label>
+          <key>Font scaling:</key>
+          <input type="range" name="fontScale" min="0.1" max="2" step="0.05"/>
+          <input type="number" name="fontScale" min="0.1" max="2" step="0.05" style="width: 5ch"/>
+        </label>
+
+        <label>
+          <key>Line spacing:</key>
+          <input type="range" name="lineSpacing" min="0.7" max="2" step="0.05"/>
+          <input type="number" name="lineSpacing" min="0.7" max="2" step="0.05" style="width: 5ch"/>
+        </label>
+
+        <hr/>
+
+        <div class="title">API Configuration</div>
+
+        <label>
+          <key>WordPress URL:</key>
+          <input type="text" value="https://dirtymittenracing.com" disabled style="opacity: 0.6"/>
+        </label>
+
+        <label>
+          <key>Access Password:</key>
+          <input type="password" name="accessPassword" size="30" placeholder="Enter password from DMRL admin"/>
+        </label>
+
+        <div style="padding: 1em; background: #3333; border-radius: 0.28em; margin-top: 1em;">
+          <button type="button" id="testConnection" style="padding: 0.5em 1em; cursor: pointer;">
+            Test Connection
+          </button>
+          <div id="connectionStatus" style="margin-top: 0.5em; padding: 0.5em; display: none; border-radius: 0.28em;"></div>
+        </div>
+
+        <hr/>
+
+        <div class="title">Default Settings</div>
+
+        <label>
+          <key>Default category:</key>
+          <select name="defaultCategory">
+            <option value="">All Categories</option>
+            <option value="A">Category A</option>
+            <option value="B">Category B</option>
+            <option value="C">Category C</option>
+            <option value="D">Category D</option>
+            <option value="E">Category E</option>
+          </select>
+        </label>
+
+        <label title="Auto-refresh is fixed at 30 seconds for API rate limiting compliance">
+          <key>Auto-refresh interval:</key>
+          <input type="text" value="30 seconds (fixed)" disabled style="opacity: 0.6"/>
+        </label>
+      </form>
+
+      <div class="section" style="margin-top: 1em; padding: 1em; background: #3333; border-radius: 0.28em;">
+        <h3 style="margin-top: 0;">About Team Live Scores</h3>
+        <p>
+          Displays live team standings from DMRL races. Data is fetched from 
+          <code>https://dirtymittenracing.com</code>.
+        </p>
+        <p><strong>Access Password:</strong> Contact a DMRL Jedi for the current password.</p>
+        <p><strong>Rate Limiting:</strong> Auto-refresh is fixed at 30 seconds.</p>
+      </div>
+    </div>
+  </body>
+</html>
